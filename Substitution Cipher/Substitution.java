@@ -1,25 +1,46 @@
 import java.util.*;
+import java.io.*;
 public class Substitution{
     int hash[] = new int[26];
-    float stats[] = {8.167,1.492,2.202,4.253,12.702,2.228,2.015,6.094,6.966,0.153,1.292,4.025,
-    2.406,6.749,7.507,1.929,0.095,5.987,6.327,9.356,2.758,0.978,2.560,0.150,1.994,0.077};
-    public String StringCipher() {
+    Double stats[] = {9.045,5.253,6.589,8.049,12.347,6.289,6.794,7.328,9.667,4.986,4.567,
+        7.021,6.465,10.259,8.356,5.756,4.271,7.580,7.964,8.906,6.167,5.450,5.990,3.08,5.089,3.22};
+    public String StringCipher() throws Exception{
         File file = new File("text.txt"); 
         BufferedReader br = new BufferedReader(new FileReader(file)); 
-        String st = br.nextLine(); 
+        String st = br.readLine(); 
         return st;
     }
-    public int findMax(T arr[]) {
+    public int findDoubleMax(Double arr[]) {
+        Double max = 0.00;
+        int index=0;
+        for(int i=0;i<26;i++){
+            if(max < arr[i]){
+                max = arr[i];
+                index = i;
+            }
+        }
+        return index;
+    }
+    public int findMax(int arr[]) {
         int max = 0,index=0;
         for(int i=0;i<26;i++){
-            if(max < (int)arr[i]){
+            if(max < arr[i]){
                 max = (int)arr[i];
                 index = i;
             }
         }
         return index;
     }
-    public int[] findRank(T arr[]) {
+    public int[] findDoubleRank(Double arr[]) {
+        int rank[] = new int[26];
+        for(int i=0;i<26;i++){
+            int x = findDoubleMax(arr);
+            rank[x] = i+1;
+            arr[x] = 0.00;
+        }
+        return rank;
+    }
+    public int[] findRank(int arr[]) {
         int rank[] = new int[26];
         for(int i=0;i<26;i++){
             int x = findMax(arr);
@@ -28,14 +49,31 @@ public class Substitution{
         }
         return rank;
     }
-    public String decript(String str) {
+    public void decript(String str) {
+        int hash[] = new int[26];
         Arrays.fill(hash,0);
-        for(int i=0;i<26;i++){
-            if(hash[i]-65==i)
-                hash[i]++;
+        for(int i=0;i<str.length();i++){
+            hash[(int)str.charAt(i)-65]++;
         }
-        int statsRank[] = findRank(stats);
+        int statsRank[] = findDoubleRank(stats);
         int hashRank[] = findRank(hash);
-        
+        for (int i = 0; i < str.length(); i++) {
+            for(int j = 0; j < 26; j++){
+                if(hashRank[(int)str.charAt(i)-65] == statsRank[j]){
+                    System.out.print((char)(j+65));
+                    break;
+                }
+            }
+        }
+    }
+    public static void main(String[] args) {
+        Substitution sub = new Substitution();
+        String msg = "";
+        try {
+            msg = sub.StringCipher();   
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        sub.decript(msg);
     }
 }
