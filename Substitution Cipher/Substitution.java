@@ -60,7 +60,10 @@ public class Substitution{
         for (int i = 0; i < str.length(); i++) {
             for(int j = 0; j < 26; j++){
                 if(hashRank[(int)str.charAt(i)-65] == statsRank[j]){
-                    System.out.print((char)(j+65));
+                    if((char)(j+65)=='X')
+                        System.out.print("I");
+                    else
+                        System.out.print((char)(j+65));
                     break;
                 }
             }
